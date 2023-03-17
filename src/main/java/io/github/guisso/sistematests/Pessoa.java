@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
@@ -41,16 +43,27 @@ public class Pessoa implements Serializable {
     // One-to-One Uni
 //    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "pessoa_id")
-    @OneToMany(cascade = CascadeType.ALL, 
+    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
             mappedBy = "pessoa")
     private List<Telefone> telefones;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+            // TODO Por que gera falha "multiple bags"
+            // fetch = FetchType.EAGER)
+    @JoinTable(
+//            name = "tbl_123456_xyz",
+            joinColumns = @JoinColumn(name = "pessoa_id"),
+            inverseJoinColumns = @JoinColumn(name = "endereco_id")
+    )
+    private List<Endereco> enderecos;
 
     @Transient
     private Byte idade;
 
     public Pessoa() {
         telefones = new ArrayList<>();
+        enderecos = new ArrayList<>();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
@@ -99,6 +112,14 @@ public class Pessoa implements Serializable {
     public void setTelefones(List<Telefone> telefones) {
         this.telefones = telefones;
     }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="hashCode/equals/toString">
@@ -132,6 +153,8 @@ public class Pessoa implements Serializable {
                 + ", credencial=" + credencial
                 + ", idade=" + idade
                 + ", telefones=" + telefones
+                // TODO Corregação #53 soluciona este problema aqui
+//                + ", enderecos=" + enderecos
                 + '}';
     }
     //</editor-fold>

@@ -3,7 +3,6 @@ package io.github.guisso.sistematests;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,6 +53,11 @@ public class PessoaServlet extends HttpServlet {
             Telefone t3 = new Telefone();
             t3.setDdd((byte) 44);
             t3.setNumero(78947894);
+            
+            Endereco e1 = new Endereco();
+            e1.setLogradouro("Rua Dois");
+            e1.setBairro("Village do Lago I");
+            e1.setNumero(300);
 
             p.setCredencial(c);
             c.setPessoa(p);
@@ -64,6 +68,8 @@ public class PessoaServlet extends HttpServlet {
             t1.setPessoa(p);
             t2.setPessoa(p);
             t3.setPessoa(p);
+            
+            p.getEnderecos().add(e1);
 
             pessoaService.salvar(p);
 
@@ -75,7 +81,7 @@ public class PessoaServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Teste realizado com sucesso</h1>");
-            out.println("<p>" + pessoaAux.toString() + "</p>");
+            out.println("<p>" + pessoaAux + "</p>");
             out.println("</body>");
             out.println("</html>");
         }
