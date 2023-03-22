@@ -50,6 +50,7 @@ public class Pessoa implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL)
             // TODO Por que gera falha "multiple bags"
+            // SOLUÇÃO @Transactional no Servlet
             // fetch = FetchType.EAGER)
     @JoinTable(
 //            name = "tbl_123456_xyz",
@@ -153,8 +154,7 @@ public class Pessoa implements Serializable {
                 + ", credencial=" + credencial
                 + ", idade=" + idade
                 + ", telefones=" + telefones
-                // TODO Corregação #53 soluciona este problema aqui
-//                + ", enderecos=" + enderecos
+                + ", enderecos=" + enderecos
                 + '}';
     }
     //</editor-fold>

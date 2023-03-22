@@ -1,11 +1,15 @@
 package io.github.guisso.sistematests;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -15,7 +19,7 @@ import javax.persistence.Id;
 public class Endereco implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +32,14 @@ public class Endereco implements Serializable {
 
     @Column(nullable = false)
     private Integer numero;
+
+    @ManyToMany(cascade = CascadeType.ALL,
+            mappedBy = "enderecos")
+    private List<Pessoa> pessoas;
+
+    public Endereco() {
+        pessoas = new ArrayList<>();
+    }
 
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public Long getId() {
@@ -61,6 +73,14 @@ public class Endereco implements Serializable {
     public void setNumero(Integer numero) {
         this.numero = numero;
     }
+
+    public List<Pessoa> getPessoas() {
+        return pessoas;
+    }
+
+    public void setPessoas(List<Pessoa> pessoas) {
+        this.pessoas = pessoas;
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="hashCode/equals/toString">
@@ -86,11 +106,19 @@ public class Endereco implements Serializable {
 
     @Override
     public String toString() {
+        
+        String idsPessoas = "[ ";
+        for (Pessoa pessoa : pessoas) {
+            idsPessoas += pessoa.getId() + ", ";
+        }
+        idsPessoas += " ]";
+        
         return "Endereco{"
                 + "id=" + id
                 + ", logradouro=" + logradouro
                 + ", bairro=" + bairro
                 + ", numero=" + numero
+                + ", pessoasId=" + idsPessoas
                 + '}';
     }
     //</editor-fold>
